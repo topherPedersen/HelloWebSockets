@@ -6,46 +6,49 @@ import {
   View,
   Text,
   StatusBar,
+  Button,
 } from 'react-native';
+
+var ws = new WebSocket('ws://echo.websocket.org/');
+
+ws.onopen = () => {
+  alert("ws.onopen called!");
+  ws.send('something');
+}
+
+ws.onmessage = (e) => {
+  alert("ws.onmessage called!");
+}
+
+ws.onerror = (e) => {
+  alert("ws.onerror called!");
+}
+
+ws.onclose = (e) => {
+  alert("ws.onclose called!");
+}
 
 class App extends React.Component {
   constructor(props) {
     super(props);
+  }
 
+  handlePingWebSocketServer() {
+    ws.send("hello, world");
   }
 
   render() {
 
-    //alert("this thing working?");
-    var ws = new WebSocket('ws://echo.websocket.org/');
-
-    ws.onopen = () => {
-      // connection opened
-      alert("ws.onopen called!");
-      ws.send('something');
-    }
-
-    ws.onmessage = (e) => {
-      // a message was received
-      // alert(e.data.toString())
-      alert("ws.onmessage called!");
-    }
-
-    ws.onerror = (e) => {
-      // an error occurred
-      //alert(e.message.toString());
-      alert("ws.onerror called!");
-    }
-
-    ws.onclose = (e) => {
-      // connection closed
-      //alert(e.code.toString() + e.reason.toString());
-      alert("ws.onclose called!");
-    }
 
     return(
       <View>
+
         <Text>hello, world</Text>
+
+        <Button 
+          title="Ping WebSocket Server"
+          onPress={ () => this.handlePingWebSocketServer() } />
+
       </View>
     );
   }
